@@ -40,6 +40,13 @@ def get_1516_TRB_marginals_and_params_filenames():
     out_params = os.path.join(fn_1516, '1516_TRB_params.txt')
     return out_marginals, out_params
 
+def get_1363_TRB_marginals_and_params_filenames():
+    data_folder = get_testdata_folder()
+    fn_ced = os.path.join(data_folder, 'models_imgt_ref_dir_sep2019', 'HC')
+    fn_1363 = os.path.join(fn_ced, '1363_TRB')
+    out_marginals = os.path.join(fn_1363, '1363_TRB_marginals.txt')
+    out_params = os.path.join(fn_1363, '1363_TRB_params.txt')
+    return out_marginals, out_params
 
 @pytest.fixture
 def genmodelwrapper_1516_TRA():
@@ -57,14 +64,21 @@ def genmodelwrapper_1516_TRB():
 def merged_genmodelwrapper_1516_TRA():
     fn_margs, fn_params = get_1516_TRA_marginals_and_params_filenames()
     gmw = GenModelWrapper(fn_params, fn_margs, '1516_TRA_', DummyLogger())
-    gmw.merge_alleles()
+    gmw.merge_alleles(assert_merge_definitions=True)
     return gmw
 
 @pytest.fixture
 def merged_genmodelwrapper_1516_TRB():
     fn_margs, fn_params = get_1516_TRB_marginals_and_params_filenames()
     gmw = GenModelWrapper(fn_params, fn_margs, '1516_TRB_', DummyLogger())
-    gmw.merge_alleles()
+    gmw.merge_alleles(assert_merge_definitions=True)
+    return gmw
+
+@pytest.fixture
+def merged_genmodelwrapper_1363_TRB():
+    fn_margs, fn_params = get_1363_TRB_marginals_and_params_filenames()
+    gmw = GenModelWrapper(fn_params, fn_margs, '1363_TRB_', DummyLogger())
+    gmw.merge_alleles(assert_merge_definitions=True)
     return gmw
 
 @pytest.fixture

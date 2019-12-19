@@ -11,7 +11,7 @@ from pomegranate.distributions.DiscreteDistribution import DiscreteDistribution
 
 class BayesianNetworkMergeUtils(object):
     @staticmethod
-    def create_distribution_event_merge_definitions(gen_model_event, prefix=None, merge_singleton_events=False):
+    def create_merge_definition_list(gen_model_event, prefix=None, merge_singleton_events=False):
         genes = ir_genes.Genes()
         for realization in gen_model_event.realizations:
             r_name = realization.name.strip()
@@ -42,28 +42,31 @@ class BayesianNetworkMergeUtils(object):
         return merge_defs
 
     @staticmethod
-    def create_merged_bayesian_network_for_event(event, prefix, bayesian_network, bake=False, logger=StdOutLogger(verbose=False)):
-        merge_defs = BayesianNetworkMergeUtils.create_distribution_event_merge_definitions(
+    def create_merged_bayesian_network_for_events(events, prefixes, bayesian_network,
+                              assert_merge_definitions=False, logger=StdOutLogger(verbose=False)):
+        for event, prefix in zip(events, prefixes):
+            bayesian_network = BayesianNetworkMergeUtils.create_merged_bayesian_network_for_event(event, prefix,
+                                                        bayesian_network, assert_merge_definitions, logger)
+        return bayesian_network
+
+    @staticmethod
+    def create_merged_bayesian_network_for_event(event, prefix, bayesian_network,
+                                                 assert_merge_definitions=False,
+                                                 logger=StdOutLogger(verbose=False)):
+        merge_def_list = BayesianNetworkMergeUtils.create_merge_definition_list(
                                             event, prefix, merge_singleton_events=False)
         logger.log('Merging...', includeTimestamp=True)
         logger.set_carriage_reset(True)
-        count = len(merge_defs)
-        for index, merge_def in enumerate(merge_defs):
-            logger.log("\rMerging '%s' (%i of %i)" %(merge_def.get_merged_event(), index+1, count), includeTimestamp=True)
-            out = DistributionEventMergeDefinitions(event.name, bayesian_network,
-                                                    allow_unspecified_events=True)
-            out.set_merge_definitions([merge_def])
+        count = len(merge_def_list)
+        for index, merge_def in enumerate(merge_def_list):
+            logger.log("\rMerging '%s' (%i of %i)" %(merge_def.get_merged_event(), index+1, count),
+                                                                            includeTimestamp=True)
+            merge_defs = DistributionEventMergeDefinitions(event.name, bayesian_network,
+                                                           allow_unspecified_events=True,
+                                                           assert_merge_definitions=assert_merge_definitions)
+            merge_defs.set_merge_definitions([merge_def])
             bn_wrapper = BayesianNetworkWrapper(bayesian_network)
-            bayesian_network = bn_wrapper.create_network_with_merged_events(out, bake=False)
-        if bake: bayesian_network.bake()
+            bayesian_network = bn_wrapper.create_network_with_merged_events(merge_defs, bake=True)
         logger.set_carriage_reset(False)
         logger.log('Merging done!', includeTimestamp=True)
-        return bayesian_network
-
-
-    @staticmethod
-    def create_merged_bayesian_network_for_events(events, prefixes, bayesian_network, bake=False, logger=StdOutLogger(verbose=False)):
-        for event, prefix in zip(events, prefixes):
-            bayesian_network = BayesianNetworkMergeUtils.create_merged_bayesian_network_for_event(
-                                                        event, prefix, bayesian_network, bake, logger)
         return bayesian_network

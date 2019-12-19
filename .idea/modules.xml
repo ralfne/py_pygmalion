@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../bayesian_network_utils/.idea/bayesian_network_utils.iml" filepath="$PROJECT_DIR$/../bayesian_network_utils/.idea/bayesian_network_utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/pygmalion.iml" filepath="$PROJECT_DIR$/.idea/pygmalion.iml" />
     </modules>
   </component>
