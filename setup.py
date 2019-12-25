@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pygmalion',
-    version='0.4',
+    version='0.52',
     packages=['pygmalion', 'pygmalion.tests', 'pygmalion.donors', 'pygmalion.genmodel',
               'pygmalion.validators', 'pygmalion.persistence', 'pygmalion.markov_chains',
               'pygmalion.bayesian_network_importer'],

@@ -25,17 +25,17 @@ def test_2__merge_trb_v_gene_alleles(merged_genmodelwrapper_1516_TRB):
     assert (is_similar(margs.sum(), 1.0, 0.001))
 
 def test_3__merge_alleles(ced_donors, hc_donors):
-    itr = GenModelWrapperIterator(ced_donors, filter_by_chain=None)
+    itr = GenModelWrapperIterator(ced_donors, filtering_chain=None)
     for gmw in itr:
         gmw.merge_alleles(assert_merge_definitions=True)
-    itr = GenModelWrapperIterator(hc_donors, filter_by_chain=None)
+    itr = GenModelWrapperIterator(hc_donors, filtering_chain=None)
     for gmw in itr:
         gmw.merge_alleles(assert_merge_definitions=True)
 
 def test_4__merge_alleles_no_checks(ced_donors, hc_donors):
-    itr = GenModelWrapperIterator(ced_donors, filter_by_chain=None)
+    itr = GenModelWrapperIterator(ced_donors, filtering_chain=None)
     for gmw in itr:
         gmw.merge_alleles(assert_merge_definitions=False)
-    itr = GenModelWrapperIterator(hc_donors, filter_by_chain=None)
+    itr = GenModelWrapperIterator(hc_donors, filtering_chain=None)
     for gmw in itr:
         gmw.merge_alleles(assert_merge_definitions=False)

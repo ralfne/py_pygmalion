@@ -97,7 +97,7 @@ class DefaultPersistenceHandler(PersistenceHandler):
     def instantiate(foldername, logger=StdOutLogger(verbose=False)):
         broker = DefaultPersistenceHandler._get_filenames_broker(foldername)
         out = DefaultPersistenceHandler._load_cells_from_filename_broker(broker, logger)
-        logger.log('Cells loaded from folder ' + foldername, includeTimestamp=True, onlyIfVerbose=False)
+        logger.log('Donors loaded from folder ' + foldername, includeTimestamp=True, onlyIfVerbose=False)
         return out
 
     @staticmethod

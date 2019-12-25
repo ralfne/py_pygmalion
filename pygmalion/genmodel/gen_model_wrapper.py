@@ -98,6 +98,18 @@ class GenModelWrapper(object):
     def get_bayesian_network_wrapper(self):
         return self._network_wrapper
 
+    def _get_v_gene_marginal_from_primitives(self, v_gene_name):
+        nickname = str(Nicknames.v_choice.value)
+        event = self.get_event_from_nickname(nickname)
+        index = -1
+        for realization in event.realizations:
+            if v_gene_name == realization.name:
+                index = realization.index
+                break
+        margs = self._genmodel.marginals[0].get(nickname)
+        out = margs[index]
+        return out
+
     def assert_bayesian_network_structure_equality(self, gen_model_wrapper):
         try:
             self._network_wrapper.assert_structure_equality(gen_model_wrapper.get_bayesian_network_wrapper())

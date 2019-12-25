@@ -41,14 +41,25 @@ class _ConditionalMatrixParents(object):
 
 
 class _ConditionalMatrixRow(object):
-    def __init__(self, event, marginals, parents, gen_model_wrapper, use_realization_names):
+    def __init__(self, event, marginals, parents, gen_model_wrapper, marginals_indices_map, use_realization_names):
         self._event = event
+        self._marginals_indices_map = marginals_indices_map
         self._marginals = marginals
         self._parents = parents
         self._use_realization_names = use_realization_names
         self._gen_model_wrapper = gen_model_wrapper
+        #self._realization_index_map = self._init_realization_index_map()
         self._items = []
         self._add_rows()
+
+    # def _init_realization_index_map(self):
+    #     out = {}
+    #     for event in self._gen_model_wrapper.get_GenModel().events:
+    #         event_map = {}
+    #         out[event.name] = event_map
+    #         for i, r in enumerate(event.realizations):
+    #             event_map[i] = r.index
+    #     return out
 
     def _add_rows(self):
         sizes = self._get_parent_sizes(self._parents)
@@ -98,7 +109,11 @@ class _ConditionalMatrixRow(object):
             else:
                 current_nickname = parent_nickname
             event = self._gen_model_wrapper.get_event_from_nickname(current_nickname)
-            realization = event.realizations[index]
+            #event_map = self._realization_index_map.get(event.name)
+            #corrected_index = event_map.get(index)
+            corrected_index = self._marginals_indices_map.get_index(event, index)
+            #realization = event.realizations[index]
+            realization = event.realizations[corrected_index]
             if realization.name.strip() == '':
                 out = str(realization.value)
             else:
@@ -139,12 +154,12 @@ class ConditionalMatrix(object):
     EVENT_NICKNAME_REALIZATION_SEP = ':'
     GENE_NAME_NICKNAMES = ['v_choice', 'j_choice', 'd_gene']
 
-    def __init__(self, event, gen_model_wrapper, marginals, marginals_guide):
+    def __init__(self, event, gen_model_wrapper, marginals, marginals_guide, marginals_indices_map):
         self._event = event
         self._gen_model_wrapper = gen_model_wrapper
         self._parents = _ConditionalMatrixParents(self._gen_model_wrapper, marginals_guide)
-        self._rows = _ConditionalMatrixRow(self._event, marginals, self._parents,
-                                           self._gen_model_wrapper, use_realization_names=True)
+        self._rows = _ConditionalMatrixRow(self._event, marginals, self._parents, self._gen_model_wrapper,
+                                           marginals_indices_map, use_realization_names=True)
 
     def get_root_state(self):
         if len(self._parents) != 0: raise ValueError('Not a root state')

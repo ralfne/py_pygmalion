@@ -6,7 +6,7 @@ import immune_receptor_utils.enums as ir
 
 
 def test_iterator_1__test_donors(ced_donors):
-    itr = GenModelWrapperIterator(ced_donors, filter_by_chain=None)
+    itr = GenModelWrapperIterator(ced_donors, filtering_chain=None)
     count = 0
     for item in itr:
         assert (isinstance(item, GenModelWrapper))
@@ -22,7 +22,7 @@ def test_iterator_2__test_donors(ced_donors):
     assert count == 11
 
 def test_iterator_3__test_donors(ced_donors):
-    itr = GenModelWrapperIterator(ced_donors, filter_by_chain=ir.Chain.TRB)
+    itr = GenModelWrapperIterator(ced_donors, filtering_chain=ir.Chain.TRB)
     count = 0
     for item in itr:
         assert (isinstance(item, GenModelWrapper))
@@ -35,7 +35,7 @@ def test_iterator_5__test_genmodelwrappers(ced_donors):
     for key, donor in ced_donors.iteritems():
         gmws.add(donor.get_genmodel_wrapper(ir.Chain.TRA))
         gmws.add(donor.get_genmodel_wrapper(ir.Chain.TRB))
-    itr = GenModelWrapperIterator(gmws, filter_by_chain=None)
+    itr = GenModelWrapperIterator(gmws, filtering_chain=None)
     count = 0
     for item in itr:
         assert (isinstance(item, GenModelWrapper))
@@ -58,7 +58,7 @@ def test_iterator_7__test_genmodelwrappers(ced_donors):
     for key, donor in ced_donors.iteritems():
         gmws.add(donor.get_genmodel_wrapper(ir.Chain.TRA))
         gmws.add(donor.get_genmodel_wrapper(ir.Chain.TRB))
-    itr = GenModelWrapperIterator(gmws, filter_by_chain=ir.Chain.TRB)
+    itr = GenModelWrapperIterator(gmws, filtering_chain=ir.Chain.TRB)
     count = 0
     for item in itr:
         count += 1
@@ -68,7 +68,7 @@ def test_iterator_9__test_donorlist(ced_donors):
     lst = []
     for key, donor in ced_donors.iteritems():
         lst.append(donor)
-    itr = GenModelWrapperIterator(lst, filter_by_chain=None)
+    itr = GenModelWrapperIterator(lst, filtering_chain=None)
     count = 0
     for item in itr:
         assert (isinstance(item, GenModelWrapper))
@@ -90,7 +90,7 @@ def test_iterator_11__test_donorlist(ced_donors):
     lst = []
     for key, donor in ced_donors.iteritems():
         lst.append(donor)
-    itr = GenModelWrapperIterator(lst, filter_by_chain=ir.Chain.TRB)
+    itr = GenModelWrapperIterator(lst, filtering_chain=ir.Chain.TRB)
     count = 0
     for item in itr:
         assert (isinstance(item, GenModelWrapper))
@@ -102,7 +102,7 @@ def test_iterator_13__test_donordict(ced_donors):
     dct = {}
     for key, donor in ced_donors.iteritems():
         dct[key] = donor
-    itr = GenModelWrapperIterator(dct, filter_by_chain=None)
+    itr = GenModelWrapperIterator(dct, filtering_chain=None)
     count = 0
     for item in itr:
         assert (isinstance(item, GenModelWrapper))
@@ -124,7 +124,7 @@ def test_iterator_15__test_donordict(ced_donors):
     dct = {}
     for key, donor in ced_donors.iteritems():
         dct[key] = donor
-    itr = GenModelWrapperIterator(dct, filter_by_chain=ir.Chain.TRB)
+    itr = GenModelWrapperIterator(dct, filtering_chain=ir.Chain.TRB)
     count = 0
     for item in itr:
         assert (isinstance(item, GenModelWrapper))
@@ -153,14 +153,14 @@ def test_iterator_15__test_mixedlist(ced_donors):
         assert (isinstance(item, GenModelWrapper))
         count += 1
     assert (count == 8)
-    itr = GenModelWrapperIterator(lst, filter_by_chain=ir.Chain.TRA)
+    itr = GenModelWrapperIterator(lst, filtering_chain=ir.Chain.TRA)
     count = 0
     for item in itr:
         assert (isinstance(item, GenModelWrapper))
         assert ('TRA' in item.get_name())
         count += 1
     assert (count == 3)
-    itr = GenModelWrapperIterator(lst, filter_by_chain=ir.Chain.TRB)
+    itr = GenModelWrapperIterator(lst, filtering_chain=ir.Chain.TRB)
     count = 0
     for item in itr:
         assert (isinstance(item, GenModelWrapper))

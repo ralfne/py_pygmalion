@@ -32,6 +32,15 @@ def get_1516_TRA_marginals_and_params_filenames():
     return out_marginals, out_params
 
 
+def get_1421_TRB_marginals_and_params_filenames():
+    data_folder = get_testdata_folder()
+    fn_ced = os.path.join(data_folder, 'models_imgt_ref_dir_sep2019', 'CeD')
+    fn_1421 = os.path.join(fn_ced, '1421_TRB')
+    out_marginals = os.path.join(fn_1421, '1421_TRB_marginals.txt')
+    out_params = os.path.join(fn_1421, '1421_TRB_params.txt')
+    return out_marginals, out_params
+
+
 def get_1516_TRB_marginals_and_params_filenames():
     data_folder = get_testdata_folder()
     fn_ced = os.path.join(data_folder, 'models_imgt_ref_dir_sep2019', 'CeD')
@@ -111,3 +120,5 @@ def hc_donors():
 #     validator.run(items)
 #     out.add_data('CeD', items)
 #     return out
+
+

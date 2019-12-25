@@ -2,6 +2,7 @@ import pomegranate as pg
 from Logger import StdOutLogger
 
 from pygmalion.bayesian_network_importer.conditional_matrix import ConditionalMatrix
+from pygmalion.bayesian_network_importer.marginals_indices_map import MarginalsIndicesMap
 
 
 class BayesianNetworkImporter(object):
@@ -26,6 +27,7 @@ class BayesianNetworkImporter(object):
 
     def _create_conditional_matrices(self):
         matrices = {}
+        margs_indice_map = MarginalsIndicesMap(self._gen_model_wrapper)
         for nickname, marginals_guide in self._gen_model.marginals[1].iteritems():
             event_name = self._gen_model_wrapper.get_eventname_for_nickname(nickname)
             edge = self._gen_model.edges.get(event_name, None)
@@ -33,7 +35,7 @@ class BayesianNetworkImporter(object):
                 # this event is part of the network, ie. not part of cdr3-insertion events
                 event = self._gen_model_wrapper.get_event_from_nickname(nickname)
                 marginals = self._gen_model.marginals[0].get(nickname)
-                cm = ConditionalMatrix(event, self._gen_model_wrapper, marginals, marginals_guide)
+                cm = ConditionalMatrix(event, self._gen_model_wrapper, marginals, marginals_guide, margs_indice_map)
                 matrices[event_name] = cm
         return matrices
 

@@ -17,7 +17,7 @@ class DefaultValidator(Validator):
         self._out = True
         for c in ir.Chain:
             self._template = None
-            itr = GenModelWrapperIterator(items, filter_by_chain=c)
+            itr = GenModelWrapperIterator(items, filtering_chain=c)
             for gmw in itr:
                 if self._template is None:
                     self._template = gmw
