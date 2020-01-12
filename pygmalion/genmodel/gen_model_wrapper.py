@@ -5,6 +5,7 @@ from bayesian_network_utilities.api.bayesian_network_wrapper import BayesianNetw
 from pygmalion.bayesian_network_importer.bayesian_network_importer import BayesianNetworkImporter
 from pygmalion.genmodel.GenModel import GenModel
 from pygmalion.genmodel.bayesian_network_merge_utils import BayesianNetworkMergeUtils
+from pygmalion.genmodel.insertion_statistics_formatter import InsertionStatisticsFormatter
 from pygmalion.genmodel.nicknames import Nicknames
 from pygmalion.markov_chains.steady_state_calculator import SteadyStateCalculator
 
@@ -22,16 +23,30 @@ class GenModelWrapper(object):
         self._logger.log('GenModelWrapper.GenModel class loaded (%s, %s)' % (params_fn, marginals_fn),
                          onlyIfVerbose=True)
         self._init_names_and_nicknames()
-        self._insertion_matrices = self._init_insertion_matrices()
+        self._insertion_compositions = self._init_insertion_compositions()
+        self._insertion_lengths = self._init_insertion_lengths()
         self._network_wrapper = self._init_network_wrapper()
         self._logger.log('GenModelWrapper loaded', onlyIfVerbose=True)
 
-    def _init_insertion_matrices(self):
+    def _init_insertion_lengths(self):
+        formatter = InsertionStatisticsFormatter(self)
+        out = formatter.get_lengths_statistics()
+        return out
+
+    def get_insertion_lengths(self, nickname):
+        out = self._insertion_lengths.get(nickname, None)
+        return out
+
+    def _init_insertion_compositions(self):
         calculator = SteadyStateCalculator(self._genmodel.marginals)
-        calculator.calculate_for_key('vj_dinucl')
-        calculator.calculate_for_key('vd_dinucl')
-        calculator.calculate_for_key('dj_dinucl')
+        calculator.calculate_for_key(Nicknames.vj_dinucl.value)
+        calculator.calculate_for_key(Nicknames.vd_dinucl.value)
+        calculator.calculate_for_key(Nicknames.dj_dinucl.value)
         out = calculator.get_matrices()
+        return out
+
+    def get_insertion_composition(self, nickname):
+        out = self._insertion_compositions.get(nickname, None)
         return out
 
     def _init_network_wrapper(self):

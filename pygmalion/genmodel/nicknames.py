@@ -15,3 +15,4 @@ class Nicknames(Enum):
     vj_ins = 'vj_ins'
     vd_dinucl = 'vd_dinucl'
     dj_dinucl = 'dj_dinucl'
+    vj_dinucl = 'vj_dinucl'
